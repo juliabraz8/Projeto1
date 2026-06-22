@@ -1,0 +1,23 @@
+#molde do objeto 
+class Personagem:
+    def __init__(self, nome):
+        self.nome = nome
+        self.vida = 0
+    def ganha_vida(self): #Coleta uma poção da cura
+        if self.vida < 3: 
+            self.vida += 1
+            if self.vida == 2:
+                #Coelho muda para cor 2
+            elif self.vida == 3:
+                #Coelho volta ao normal
+    def perde_vida(self): #Coleta uma cenoura envenenada
+        if 1 < self.vida <= 3:
+            self.vida -= 1
+            if self.vida == 2:
+                #Coelho muda para cor 2
+            elif self.vida == 1:
+                #Coelho muda para cor 3
+        else:#Coelho fica com zero de vida
+            #Coelho morre(muda de skin)
+            #COELHO CAI MORTO
+animal = Personagem('coelho')
