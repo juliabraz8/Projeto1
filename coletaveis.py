@@ -32,8 +32,9 @@ class Cura(Coletáveis):
         self.tipo = "Cura"
 
     def aplicar_efeito(self, personagem):
-        if personagem.vida < constantes.max_vida:
-            personagem.vida += 1
+        if self.rect.colliderect(personagem.rect):
+            if personagem.vida < constantes.max_vida:
+                personagem.vida += 1
 
 class Foguete(Coletáveis):
     def __init__(self, tupla_coord):
@@ -42,7 +43,8 @@ class Foguete(Coletáveis):
         self.tipo = "Foguete"
 
     def aplicar_efeito(self, personagem):
-        personagem.vel = constantes.subida_foguete
+        if self.rect.colliderect(personagem.rect):
+            personagem.vel = constantes.subida_foguete
 
 class Veneno(Coletáveis):
     def __init__(self, tupla_coord):
@@ -51,7 +53,8 @@ class Veneno(Coletáveis):
         self.tipo = "Veneno"
 
     def aplicar_efeito(self, personagem):
-        personagem.vida -= 1
+        if self.rect.colliderect(personagem.rect):
+            personagem.vida -= 1
 
 def gerar_colet():
     qtde = random.randint(1, 2)

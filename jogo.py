@@ -16,17 +16,20 @@ relogio = pygame.time.Clock()
 x = 240 #abscissa 
 y = 720 #ordenada 
 
+play = False
+while not play:
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                play = True 
+
 while True:
     relogio.tick(60)
+    tela.fill((255, 255, 255))
     for event in pygame.event.get:
         if event.type == QUIT:
             pygame.quit()
-            exit()
-
-    if pygame.key.get_pressed()[K_a]:
-        x = x - 20
-    if pygame.key.get_pressed()[K_d]: 
-        x = x + 20
+            exit() 
     
     pygame.draw.rect(tela, (0,255,0), (x,y,40,50))
     pygame.display.update()
