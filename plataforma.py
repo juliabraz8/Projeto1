@@ -1,9 +1,12 @@
+import pygame
+import random
+
 # Configurações das Plataformas
 
 plataformas = [pygame.Rect(150, 500, 100, 20)]
 
 # Gerar algumas plataformas iniciais
-for i in range(1, 10):
+for i in range(1, 5):
     inicial_x = random.randint(0, largura - 100)
     inicial_y = 500 - (i * 70)
     plataformas.append(pygame.Rect(inicial_x, inicial_y, 100, 20))
@@ -41,7 +44,7 @@ while rodando:
     plataformas = [p for p in plataformas if p.y < altura]
     
     # Criação de plataformas
-    while len(plataformas) < 10:
+    while len(plataformas) < 5:
         ultimo_y = plataformas[-1].y
         plataformas_x = random.randint(0, largura - 100)
         plataformas_y = ultimo_y - random.randint(60, 100)
@@ -55,3 +58,22 @@ while rodando:
     pygame.display.update()
 
 pygame.quit()
+
+class Plataformas:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.cor = (128, 128, 128)
+    
+    def pular(self, vel_y):
+        if personagem.rect.bottom < plat.rect.centery:
+            personagem.rect.bottom = plat.rect.top #Coelho está no topo da plataforma
+            personagem.vel_y = personagem.forca_pulo
+    
+    def desenhar(self, tela):
+        pygame.draw.rect(tela, self.cor, plat)
+
+def gerar_plat():
+    inicial_x = random.randint(0, largura - 100)
+    inicial_y = 500 - (i * 70)
+    plataformas.append(pygame.Rect(inicial_x, inicial_y, 100, 20))
