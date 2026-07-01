@@ -13,6 +13,7 @@ tela = pygame.display.set_mode((constantes.largura_tela,constantes.altura_tela))
 
 pygame.display.set_caption('A subida do coelho')#Nome da aba
 relogio = pygame.time.Clock()
+fonte = pygame.font.SysFont("arial", 24)
 
 coelho = Personagem("Coelho", constantes.x, constantes.y)
 coletaveis.gerar_colet(coelho) #gerar coletáveis iniciais
@@ -36,6 +37,8 @@ while inicio: #tela de menu
     
     relogio.tick(60)
     tela.fill((255, 255, 255)) #tela branca (enqto nn tem imagem)
+    texto = fonte.render("Aperte espaço para começar!", True, (0, 0, 0))
+    tela.blit(texto, (145, 355))
     pygame.display.flip()
 
 while play == True: #jogo de fato
@@ -64,6 +67,7 @@ while play == True: #jogo de fato
     for colet in coletaveis.lista_colets[:]:
         if coelho.rect.colliderect(colet.rect):
             colet.aplicar_efeito(coelho)
+            coelho.contagem[colet.tipo] += 1
             coletaveis.lista_colets.remove(colet)
 
     #fazer a tela acompanhar o coelho:
@@ -94,6 +98,11 @@ else:
                 exit() 
         
         tela.fill((255, 0, 0))
+        texto = fonte.render("Itens coletados:", True, (0, 0, 0))
+        tela.blit(texto, (100, 240))
+        for i, (tipo, qtde) in enumerate(coelho.contagem.items()):
+            texto = fonte.render(f"{tipo} - {qtde}", True, (0, 0, 0))
+            tela.blit(texto, (150, 280+40*i))
         pygame.display.update()
 
 pygame.quit()

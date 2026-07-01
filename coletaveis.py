@@ -2,7 +2,7 @@ import constantes
 import pygame
 import random
 
-tipos_colets = ['Cura', 'Foguete', 'Veneno']
+tipos_colets = ['Cura', 'Foguete', 'Cenoura Envenenada']
 lista_colets = []
 
 class Coletáveis:
@@ -45,11 +45,11 @@ class Foguete(Coletáveis):
     def aplicar_efeito(self, personagem):
         personagem.vel_y = constantes.subida_foguete
 
-class Veneno(Coletáveis):
+class Cenoura_Envenenada(Coletáveis):
     def __init__(self, tupla_coord):
         super().__init__(tupla_coord)
         self.cor = (0, 255, 0) #verde
-        self.tipo = "Veneno"
+        self.tipo = "Cenoura Envenenada"
 
     def aplicar_efeito(self, personagem):
         personagem.vida -= 1
@@ -64,8 +64,8 @@ def gerar_colet(personagem):
             tipo = random.choice(tipos_colets)
             if tipo == "Cura":
                 colet = Cura(tupla_coord)
-            elif tipo == "Veneno":
-                colet = Veneno(tupla_coord)
+            elif tipo == "Cenoura Envenenada":
+                colet = Cenoura_Envenenada(tupla_coord)
             elif tipo == "Foguete":
                 colet = Foguete(tupla_coord)
             lista_colets.append(colet)

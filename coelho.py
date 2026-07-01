@@ -17,6 +17,11 @@ class Personagem:
         self.vel_y = 0 #Velocidade do eixo y
         self.gravidade = 0.5
         self.forca_pulo = -12
+        self.contagem = {
+            "Foguete" : 0,
+            "Cura" : 0,
+            "Cenoura Envenenada" : 0
+        }
 
     def muda_cor(self):
         if self.vida == 1:
