@@ -1,8 +1,18 @@
-subida_foguete = -20
+subida_foguete = -40
 max_vida = 3
-altura_colet = 100
-largura_colet = 100
-altura_tela = 600
-largura_tela = 800
-x = 240
+
+largura_colet = 60
+altura_colet = 60
+
+largura_tela = 600
+altura_tela = 720
+
+largura_plat = 100
+altura_plat = 20
+
+#coord inicial coelho:
+x = 280
 y = 670
+
+largura_coelho = 40
+altura_coelho = 50

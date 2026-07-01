@@ -4,16 +4,16 @@ import constantes
 
 #molde do objeto 
 class Personagem:
-    def __init__(self, nome, x, y, largura_coelho, altura_coelho):
+    def __init__(self, nome, x, y):
         self.cor = (255, 255, 255)
         self.nome = nome
         self.vida = 3
         self.x = x
         self.y = y
-        self.largura = largura_coelho
-        self.altura = altura_coelho
-        self.rect = pygame.Rect(0, 0, self.largura_coelho, self.altura_coelho) #Entorno do coelho 
-        self.rect.center = (self.x, self.y) #Centralizando
+        self.largura = constantes.largura_coelho
+        self.altura = constantes.altura_coelho
+        # self.rect = pygame.Rect(0, 0, self.largura, self.altura) #Entorno do coelho 
+        # self.rect.center = (self.x, self.y) #Centralizando
         self.vel_y = 0 #Velocidade do eixo y
         self.gravidade = 0.5
         self.forca_pulo = -12
@@ -26,18 +26,8 @@ class Personagem:
         elif self.vida == 3:
             self.cor = (255, 255, 255)#Coelho volta ao normal
         else: #vida = 0
-            self.cor = (0, 0, 0)#Coelho morre(muda de skin)
-
-    def ganha_vida(self): #Coleta uma poção da cura
-        if self.rect.colliderect(cura.rect):
-            self.muda_cor()
-
-    def perde_vida(self): #Coleta uma cenoura envenenada
-        if self.rect.colliderect(veneno.rect):
-            self.muda_cor()
-        if self.vida == 0:
+            self.cor = (0, 255, 255)#Coelho morre(muda de skin)
              
-
     def mover(self):
         if pygame.key.get_pressed()[K_a]: #Se o jogador clicar na tecla "A"
          self.x = self.x - 10 #10 pixels para esquerda
@@ -45,16 +35,21 @@ class Personagem:
             self.x = self.x + 10 #10 pixels para direita
         
         #Para que o personagem não consiga ir além da borda da janela do jogo
-        if self.rect.left + x < 0: #Lado esquerdo
-            x -= self.rect.left 
-        if self.rect.right + x > constantes.largura_tela: #Lado direito
-            x = constantes.largura_tela - self.rect.right 
+        if self.rect.left < 0: #Lado esquerdo
+            self.x = 0
+        if self.rect.right > constantes.largura_tela: #Lado direito
+            self.x = constantes.largura_tela - self.largura
 
 
     def desenhar(self, tela):
-        pygame.draw.rect(tela, self.cor, (self.x, self.y, self.largura_coelho, self.altura_coelho)) #enquanto não temos a imagem do coelho, usaremos um retângulo 
+        pygame.draw.rect(tela, self.cor, (self.x, self.y, self.largura, self.altura)) #enquanto não temos a imagem do coelho, usaremos um retângulo 
+
+    def aplicar_gravidade(self):
+        self.vel_y += self.gravidade
+        if self.vel_y > 10:
+            self.vel_y = 10
+        self.y += self.vel_y
 
     @property #permite chamar essa função sem os ()
     def rect(self):
-        return pygame.Rect(self.x, self.y, self.largura_coelho, self.altura_coelho)
-personagem = Personagem('coelho', constantes.x, constantes.y , 30, 50)
+        return pygame.Rect(self.x, self.y, self.largura, self.altura)

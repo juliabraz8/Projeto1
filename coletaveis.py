@@ -28,7 +28,7 @@ class Coletáveis:
 class Cura(Coletáveis):
     def __init__(self, tupla_coord):
         super().__init__(tupla_coord)
-        self.cor = (255, 255, 255) #definir cor pra cada subclasse -> temporário enqt nn tem imagem
+        self.cor = (255, 0, 0) #definir cor pra cada subclasse -> temporário enqt nn tem imagem // vermelho
         self.tipo = "Cura"
 
     def aplicar_efeito(self, personagem):
@@ -39,34 +39,33 @@ class Cura(Coletáveis):
 class Foguete(Coletáveis):
     def __init__(self, tupla_coord):
         super().__init__(tupla_coord)
-        self.cor = (0, 0, 255)
+        self.cor = (0, 0, 255) #azul
         self.tipo = "Foguete"
 
     def aplicar_efeito(self, personagem):
-        if self.rect.colliderect(personagem.rect):
-            personagem.vel = constantes.subida_foguete
+        personagem.vel_y = constantes.subida_foguete
 
 class Veneno(Coletáveis):
     def __init__(self, tupla_coord):
         super().__init__(tupla_coord)
-        self.cor = (0, 255, 0)
+        self.cor = (0, 255, 0) #verde
         self.tipo = "Veneno"
 
     def aplicar_efeito(self, personagem):
-        if self.rect.colliderect(personagem.rect):
-            personagem.vida -= 1
+        personagem.vida -= 1
 
-def gerar_colet():
-    qtde = random.randint(1, 2)
-    for i in range(qtde):
-        coord_x = random.randint(0, constantes.largura_tela)
-        coord_y = random.randint(0, constantes.altura_tela//2)
-        tupla_coord = (coord_x, coord_y)
-        tipo = random.choice(tipos_colets)
-        if tipo == "Cura":
-            colet = Cura(tupla_coord)
-        elif tipo == "Veneno":
-            colet = Veneno(tupla_coord)
-        elif tipo == "Foguete":
-            colet = Foguete(tupla_coord)
-        lista_colets.append(colet)
+def gerar_colet(personagem):
+    if len(lista_colets) < 4: #não deixar lotar a tela de coletáveis
+        qtde = random.randint(0, 2) #qtde de coletáveis a serem gerados
+        for _ in range(qtde):
+            coord_x = random.randint(0, constantes.largura_tela)
+            coord_y = random.uniform(-constantes.altura_colet, personagem.y-constantes.altura_tela) #gerar os coletáveis ainda fora da tela (pra cima)
+            tupla_coord = (coord_x, coord_y)
+            tipo = random.choice(tipos_colets)
+            if tipo == "Cura":
+                colet = Cura(tupla_coord)
+            elif tipo == "Veneno":
+                colet = Veneno(tupla_coord)
+            elif tipo == "Foguete":
+                colet = Foguete(tupla_coord)
+            lista_colets.append(colet)
