@@ -14,5 +14,5 @@ altura_plat = 20
 x = 280
 y = 670
 
-largura_coelho = 40
-altura_coelho = 50
+largura_coelho = 60
+altura_coelho = 80
