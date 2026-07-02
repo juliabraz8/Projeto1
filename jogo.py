@@ -9,7 +9,7 @@ import plataforma
 pygame.init()
 
 tela = pygame.display.set_mode((constantes.largura_tela, constantes.altura_tela))
-pygame.display.set_caption('A subida do coelho')
+pygame.display.set_caption('BunnyBounce')
 
 placar = 0
 relogio = pygame.time.Clock()
@@ -99,7 +99,7 @@ while rodar:
             if coelho.rect.colliderect(colet.rect):
                 colet.aplicar_efeito(coelho)
                 if colet.tipo == "Foguete":
-                    placar -= 100
+                    placar += 100
                 coelho.contagem[colet.tipo] += 1
                 coletaveis.lista_colets.remove(colet)
 
