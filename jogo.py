@@ -37,125 +37,123 @@ planodefundo = pygame.transform.scale(planodefundo, (constantes.largura_tela, co
     
 imagem_coracao = pygame.image.load("sprites/vida.webp").convert_alpha()
 
-coelho = Personagem("Coelho", constantes.x, constantes.y)
+def inicio_jogo():
+    plataforma.plataformas = []
+    coletaveis.lista_colets = []
+    coelho = Personagem("Coelho", constantes.x, constantes.y)
+    coletaveis.gerar_colet(coelho)
+    plat1 = plataforma.Plataformas(
+        coelho.x - (constantes.largura_plat - constantes.largura_coelho) / 2,
+        coelho.rect.bottom
+    )
+    plataforma.plataformas.append(plat1)
+    plataforma.gerar_plats_iniciais()
+    return coelho
 
-coletaveis.gerar_colet(coelho)
+coelho = inicio_jogo()
+rodar = True
+estadoJogo = 0 #0 p/ menu inicial; 1 p/ rodar o jogo; 2 p/ tela final 
 
-plat1 = plataforma.Plataformas(
-    coelho.x - (constantes.largura_plat - constantes.largura_coelho) / 2,
-    coelho.rect.bottom
-)
+while rodar:
+    eventos = pygame.event.get()
+    relogio.tick(60)
 
-plataforma.plataformas.append(plat1)
-plataforma.gerar_plats_iniciais()
-
-inicio = True
-play = True
-
-while inicio:
-    for event in pygame.event.get():
+    for event in eventos:
         if event.type == QUIT:
             pygame.quit()
             exit()
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                play = True
-                inicio = False
+    if estadoJogo == 0:
+        for event in eventos:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    estadoJogo = 1
 
-    relogio.tick(60)
-    tela.fill((255, 255, 255))
+        tela.fill((255, 255, 255))
 
-    texto = fonte.render("Aperte espaço para começar!", True, (0, 0, 0))
-    tela.blit(texto, (120,355))
-
-    pygame.display.flip()
-
-while play:
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            exit()
-
-    # aparecer o background 
-    tela.blit(planodefundo, (0, 0))
-    relogio.tick(60)
-
-    coelho.muda_cor()
-    coelho.desenhar(tela)
-
-    for plat in plataforma.plataformas:
-        plat.desenhar(tela)
-
-    for colet in coletaveis.lista_colets:
-        colet.desenhar(tela)
-
-    coelho.mover()
-    coelho.aplicar_gravidade()
-
-    for plat in plataforma.plataformas:
-        if coelho.vel_y > 0 and coelho.rect.colliderect(plat.rect):
-            plat.pular(coelho)
-
-    for colet in coletaveis.lista_colets[:]:
-        if coelho.rect.colliderect(colet.rect):
-            colet.aplicar_efeito(coelho)
-            if colet.tipo == "Foguete":
-                placar -= 100
-            coelho.contagem[colet.tipo] += 1
-            coletaveis.lista_colets.remove(colet)
+        texto = fonte.render("Aperte espaço para começar!", True, (0, 0, 0))
+        tela.blit(texto, (120,355))
 
 
-    if coelho.y < constantes.altura_tela // 2:
-        diferenca = constantes.altura_tela // 2 - coelho.y
-        coelho.y = constantes.altura_tela // 2
+    if estadoJogo == 1:
+        # aparecer o background 
+        tela.blit(planodefundo, (0, 0))
+
+        coelho.muda_cor()
+        coelho.desenhar(tela)
 
         for plat in plataforma.plataformas:
-            plat.descer(diferenca)
-
-        plataforma.plataformas = [
-            p for p in plataforma.plataformas
-            if p.y < constantes.altura_tela
-        ]
+            plat.desenhar(tela)
 
         for colet in coletaveis.lista_colets:
-            colet.descer(diferenca)
+            colet.desenhar(tela)
 
-        coletaveis.lista_colets = [
-            c for c in coletaveis.lista_colets
-            if c.y < constantes.altura_tela
-        ]
+        coelho.mover()
+        coelho.aplicar_gravidade()
 
-    plataforma.gerar_plats_gerais(coelho)
-    coletaveis.gerar_colet(coelho)
+        for plat in plataforma.plataformas:
+            if coelho.vel_y > 0 and coelho.rect.colliderect(plat.rect):
+                plat.pular(coelho)
 
-    if coelho.y > constantes.altura_tela or coelho.vida == 0:
-        play = False
-    
-    if coelho.vel_y < 0 and (pygame.key.get_pressed()[K_a] or pygame.key.get_pressed()[K_d] ):
-        placar -= coelho.vel_y
-    desenhoplacar()
-    desenhovidas(coelho)
+        for colet in coletaveis.lista_colets[:]:
+            if coelho.rect.colliderect(colet.rect):
+                colet.aplicar_efeito(coelho)
+                if colet.tipo == "Foguete":
+                    placar -= 100
+                coelho.contagem[colet.tipo] += 1
+                coletaveis.lista_colets.remove(colet)
 
-    pygame.display.update()
 
-sair = False
+        if coelho.y < constantes.altura_tela // 2:
+            diferenca = constantes.altura_tela // 2 - coelho.y
+            coelho.y = constantes.altura_tela // 2
 
-while not sair:
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            sair = True
+            for plat in plataforma.plataformas:
+                plat.descer(diferenca)
 
-    tela.blit(planodefundo,(0,0))
-    planodefundo = pygame.image.load("sprites/fundo.png").convert_alpha() # imagem do background
-    planodefundo = pygame.transform.scale(planodefundo, (constantes.largura_tela, constantes.altura_tela)) # escala do background
+            plataforma.plataformas = [
+                p for p in plataforma.plataformas
+                if p.y < constantes.altura_tela
+            ]
 
-    texto = fonte.render("Itens coletados:", True, (0, 0, 0))
-    tela.blit(texto, (100, 240))
+            for colet in coletaveis.lista_colets:
+                colet.descer(diferenca)
 
-    for i, (tipo, qtde) in enumerate(coelho.contagem.items()):
-        texto = fonte.render(f"{tipo} - {qtde}", True, (0, 0, 0))
-        tela.blit(texto, (150, 280 + 40 * i))
+            coletaveis.lista_colets = [
+                c for c in coletaveis.lista_colets
+                if c.y < constantes.altura_tela
+            ]
+
+        plataforma.gerar_plats_gerais(coelho)
+        coletaveis.gerar_colet(coelho)
+
+        if coelho.y > constantes.altura_tela or coelho.vida == 0:
+            estadoJogo = 2
+        
+        if coelho.vel_y < 0 and (pygame.key.get_pressed()[K_a] or pygame.key.get_pressed()[K_d] ):
+            placar -= coelho.vel_y
+        desenhoplacar()
+        desenhovidas(coelho)
+
+
+    if estadoJogo == 2:
+        tela.blit(planodefundo,(0,0))
+        
+        texto = fonte.render("Itens coletados:", True, (0, 0, 0))
+        tela.blit(texto, (100, 240))
+
+        for i, (tipo, qtde) in enumerate(coelho.contagem.items()):
+            texto = fonte.render(f"{tipo} - {qtde}", True, (0, 0, 0))
+            tela.blit(texto, (150, 280 + 40 * i))
+        
+        texto_reinicio = fonte.render("Aperte ESPAÇO para reiniciar o jogo!", True, (0, 0, 0))
+        tela.blit(texto_reinicio, (45, 500))
+        for event in eventos:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    estadoJogo = 1
+                    coelho = inicio_jogo()
+                    placar = 0
 
     pygame.display.update()
 
