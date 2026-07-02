@@ -24,10 +24,18 @@ def desenhoplacar():
     pygame.draw.line(tela, (0,80,100), (0, 30), (constantes.largura_tela, 30 ), 3) 
     escrever('PONTUAÇÃO: ' + str(placar), fonte, (0,80,100), 10, 3) # pontuação 
 
+def desenhovidas(personagem): 
+    if personagem.vida >= 1:
+        tela.blit(pygame.transform.scale(imagem_coracao, (25, 25)), (constantes.largura_tela-110, 3))
+    if personagem.vida >= 2:
+        tela.blit(pygame.transform.scale(imagem_coracao, (25, 25)), (constantes.largura_tela-75, 3))
+    if personagem.vida == 3:
+        tela.blit(pygame.transform.scale(imagem_coracao, (25, 25)), (constantes.largura_tela-40, 3))
 
 planodefundo = pygame.image.load("sprites/fundo.png").convert_alpha() # imagem do background
 planodefundo = pygame.transform.scale(planodefundo, (constantes.largura_tela, constantes.altura_tela)) # escala do background
     
+imagem_coracao = pygame.image.load("sprites/vida.webp").convert_alpha()
 
 coelho = Personagem("Coelho", constantes.x, constantes.y)
 
@@ -127,6 +135,7 @@ while play:
     if coelho.vel_y < 0 and (pygame.key.get_pressed()[K_a] or pygame.key.get_pressed()[K_d] ):
         placar -= coelho.vel_y
     desenhoplacar()
+    desenhovidas(coelho)
 
     pygame.display.update()
 
