@@ -13,7 +13,7 @@ pygame.display.set_caption('A subida do coelho')
 
 placar = 0
 relogio = pygame.time.Clock()
-fonte = pygame.font.SysFont("arial", 24)
+fonte = pygame.font.SysFont("couriernew", 24)
 
 def escrever(texto, fonte, cor_texto, x, y):
     imagem = fonte.render(texto, True, cor_texto)
@@ -59,7 +59,7 @@ while inicio:
     tela.fill((255, 255, 255))
 
     texto = fonte.render("Aperte espaço para começar!", True, (0, 0, 0))
-    tela.blit(texto, (145, 355))
+    tela.blit(texto, (120,355))
 
     pygame.display.flip()
 
@@ -137,7 +137,9 @@ while not sair:
         if event.type == QUIT:
             sair = True
 
-    tela.fill((220, 10 , 10))
+    tela.blit(planodefundo,(0,0))
+    planodefundo = pygame.image.load("sprites/fundo.png").convert_alpha() # imagem do background
+    planodefundo = pygame.transform.scale(planodefundo, (constantes.largura_tela, constantes.altura_tela)) # escala do background
 
     texto = fonte.render("Itens coletados:", True, (0, 0, 0))
     tela.blit(texto, (100, 240))
